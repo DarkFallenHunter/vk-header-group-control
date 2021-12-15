@@ -1,9 +1,11 @@
-from typing import Optional
-
+import hashlib
 import config
 import requests
 import sys
+import os
+import dotenv
 
+from typing import Optional
 from src.vk_connection import VkConnection
 from src.vk_connection import GetUploadUrlError, ImageUploadError, UploadUrlNotExistsError, SetHeaderPhotoError
 from src.logger import Logger, LogLevel
@@ -65,6 +67,13 @@ def main():
 
     try:
         byte_image = get_image(now_week)
+
+        image_hash = hashlib.sha1(byte_image).hexdigest()
+        last_image_hash = os.environ.get(config.LAST_HASH_NAME, '')
+        if image_hash == last_image_hash:
+            info_logger.log('The same image already set')
+            return
+
         vk_connection.set_header_image(
             upload_url,
             byte_image
@@ -85,6 +94,7 @@ def main():
         error_logger.log(str(e))
         sys.exit(6)
 
+    dotenv.set_key(config.ENV_FILE, config.LAST_HASH_NAME, image_hash)
     info_logger.log(f'Set image for {now_week} week')
 
 

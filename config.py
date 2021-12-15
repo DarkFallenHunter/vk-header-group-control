@@ -7,11 +7,12 @@ PROJ_DIR = os.path.dirname(os.path.abspath(__file__))
 LOGS_DIR = os.path.join(PROJ_DIR, 'logs')
 ERROR_LOG_FILENAME = os.path.join(LOGS_DIR, 'errors.log')
 INFO_LOG_FILENAME = os.path.join(LOGS_DIR, 'info.log')
+LAST_HASH_NAME = 'LAST_HASH'
 
-_ENV_FILE = os.path.join(PROJ_DIR, '.env')
+ENV_FILE = os.path.join(PROJ_DIR, '.env')
 
-if os.path.exists(_ENV_FILE):
-    load_dotenv(_ENV_FILE)
+if os.path.exists(ENV_FILE):
+    load_dotenv(ENV_FILE)
 
 # YaConfig
 DISK_TOKEN = os.environ.get('DISK_TOKEN', None)
